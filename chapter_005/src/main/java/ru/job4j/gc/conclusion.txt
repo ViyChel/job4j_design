@@ -1,0 +1,60 @@
+Объяснить поведение программы в текстовом файле.
+
+Запуск VM был произведенс опцией -Xmx5m (максимальный объем памяти для heap 5 мегабайт).
+Так как памяти было выделено немного по мере создания объектов для освобождения памяти
+вызывается garbage collector.
+GC определил на какие объекты нет ссылок и вызвал у них метод finalize().
+Объекты не имеющие ссылок на них были удалены.
+
+Как видим не у всех объектов был вызван метод finalize().
+Нет гарантии на то, в какое время будет вызван метод finalize().
+Это связано с тем, что после того, как объект становится доступным для сборки и
+если в нем переопределен метод finalize, то он не вызывается сразу, а помещается в очередь,
+которая обрабатывается специально созданным для этого потоком (на выводе видно, что поток main уже отработал,
+а методы finalize() продолжали работать).
+Есть вероятность, что этот метод не будет вызван совсем. Это может произойти в момент,
+когда объект уже станет доступным для сборщика мусора и программа завершит свою работу.
+Также JVM может решить не вызывать finalize() в целях оптимизации.
+
+#### Heap utilization statistics [MB] ####
+Used : 2
+Free : 3
+Total: 6
+Maximum : 6
+Destroyed object user Ivan id 7
+#### Heap utilization statistics [MB] ####
+Destroyed object user Ivan id 532
+Destroyed object user Ivan id 975
+Destroyed object user Ivan id 1306
+Used : 1
+Free : 4
+Total: 6
+Maximum : 6
+Destroyed object user Ivan id 1630
+Destroyed object user Ivan id 2984
+Destroyed object user Ivan id 3306
+Destroyed object user Ivan id 3624
+Destroyed object user Ivan id 3934
+Destroyed object user Ivan id 4250
+Destroyed object user Ivan id 4559
+Destroyed object user Ivan id 4895
+Destroyed object user Ivan id 5215
+Destroyed object user Ivan id 5534
+Destroyed object user Ivan id 5858
+Destroyed object user Ivan id 6166
+Destroyed object user Ivan id 6506
+Destroyed object user Ivan id 6822
+Destroyed object user Ivan id 7142
+Destroyed object user Ivan id 7475
+Destroyed object user Ivan id 7802
+Destroyed object user Ivan id 8015
+Destroyed object user Ivan id 8014
+Destroyed object user Ivan id 8013
+Destroyed object user Ivan id 8012
+Destroyed object user Ivan id 8011
+Destroyed object user Ivan id 8010
+Destroyed object user Ivan id 8009
+Destroyed object user Ivan id 8008
+Destroyed object user Ivan id 8007
+
+Process finished with exit code 0
